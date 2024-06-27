@@ -15,14 +15,13 @@
 
 - name: Display output
   ansible.builtin.debug:
-   var: current_desktop.stdout_lines
+   var: current_desktop.stdout
 
 - block: # Block for mate
    - name: Update background MATE
      ansible.builtin.shell: gsettings set org.mate.background picture-filename {{ background }} 
-  when: "{{ item }}"  == "mate-session"
-  with_items:
-  - "current_desktop.stdout_lines"
+  when: current_desktop.stdout == 'mate-session'
+
 - block: # Block for KDE
    - name: Update config file for KDE
      ansible.builtin.shell: kwriteconfig5 --file "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc" --group 'Containments' -- group '1' --group 'Wallpaper' --group 'org.kde.image' --group 'General' --key 'Image' "file://{{ background }}"
