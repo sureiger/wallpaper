@@ -2,7 +2,7 @@
 
 - name: Change background wallpaper 
   hosts: all
-  become: yes
+#  become: yes
 
   roles:
     - change_wallpaper
