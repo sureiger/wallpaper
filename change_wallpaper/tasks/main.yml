@@ -1,2 +1,32 @@
 ---
 # tasks file for change_wallpaper
+- name: Check system details
+  ansible.builtin.debug:
+    msg: "{{ item }}"
+  with_items:
+  - "ansible_os_family: {{ ansible_os_family }}"
+  - "ansible_distribution: {{ ansible_distribution }}"
+#  - "ansible_env: {{ ansible_env }}"
+- name: Check current desktop
+  ansible.builtin.shell: ls | grep '^[a-zA-Z]*-session$'
+  args:
+    chdir: /usr/bin/
+  register: current_desktop
+
+- name: Display output
+  ansible.builtin.debug:
+   var: current_desktop.stdout_lines
+
+- block: # Block for mate
+   - name: Update background MATE
+     ansible.builtin.shell: gsettings set org.mate.background picture-filename {{ background }} 
+  when: "{{ item }}"  == "mate-session"
+  with_items:
+  - "current_desktop.stdout_lines"
+- block: # Block for KDE
+   - name: Update config file for KDE
+     ansible.builtin.shell: kwriteconfig5 --file "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc" --group 'Containments' -- group '1' --group 'Wallpaper' --group 'org.kde.image' --group 'General' --key 'Image' "file://{{ background }}"
+     notify:
+       - Restart plasmashell
+  when: current_desktop == "KDE"
+

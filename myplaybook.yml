@@ -1,0 +1,8 @@
+---
+
+- name: Change background wallpaper 
+  hosts: all
+  become: yes
+
+  roles:
+    - change_wallpaper

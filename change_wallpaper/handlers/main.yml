@@ -1,2 +1,7 @@
 ---
 # handlers file for change_wallpaper
+
+- name: Restart plasmashell
+  ansible.builtin.shell: |
+    killall plasmashell &&
+    kstart5 plasmashell
