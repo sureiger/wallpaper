@@ -24,8 +24,8 @@
 
 - block: # Block for KDE
    - name: Update config file for KDE
-     ansible.builtin.shell: kwriteconfig5 --file "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc" --group 'Containments' --group '1' --group 'Wallpaper' --group 'org.kde.image' --group 'General' --key 'Image' "file:///home/test/Downloads/mywallpaper.jpg"
+     ansible.builtin.shell: kwriteconfig5 --file "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc" --group 'Containments' --group '1' --group 'Wallpaper' --group 'org.kde.image' --group 'General' --key 'Image' "file://{{ background }}"
      notify:
-       - Restart plasmashell
+       - Restart display
   when: current_desktop.stdout == ""
 

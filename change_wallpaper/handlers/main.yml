@@ -1,7 +1,9 @@
 ---
 # handlers file for change_wallpaper
 
-- name: Restart plasmashell
-  ansible.builtin.shell: |
-    killall plasmashell &&
-    kstart5 plasmashell
+- name: Restart display
+  ansible.builtin.service:
+    name: display-manager
+    state: restarted
+  become: yes
+
